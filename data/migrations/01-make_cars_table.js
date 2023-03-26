@@ -1,6 +1,6 @@
 exports.up = async function (knex) {
   // DO YOUR MAGIC
-  await knex.schema.createTable("dealer", (table) => {
+  await knex.schema.createTable("cars", (table) => {
     table.increments("id");
     table.string("vin").notNullable().unique();
     table.string("make").notNullable();
@@ -13,5 +13,5 @@ exports.up = async function (knex) {
 
 exports.down = async function (knex) {
   // DO YOUR MAGIC
-  await knex.schema.dropTableIfExists("dealer");
+  await knex.schema.dropTableIfExists("cars");
 };
