@@ -20,7 +20,7 @@ const getByVin = async (vin) => {
 
 const create = async (car) => {
   // DO YOUR MAGIC
-  let id = await db("cars").insert(car);
+  let [id] = await db("cars").insert(car);
   let newCar = await getById(id);
   return newCar;
 };
