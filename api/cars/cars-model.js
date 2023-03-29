@@ -1,12 +1,4 @@
-const knex = require("knex");
-
-const db = knex({
-  client: "sqlite3",
-  connection: {
-    filename: "./data/cars.db3",
-  },
-  useNullAsDefault: true,
-});
+const db = require("../../data/db-config");
 
 const getAll = async () => {
   // DO YOUR MAGIC
@@ -20,13 +12,22 @@ const getById = async (id) => {
   return selectedCar;
 };
 
-const create = () => {
+const getByVin = async (vin) => {
   // DO YOUR MAGIC
-  // let created = db("dealer").create;
+  let [selectedCar] = await db("cars").where("vin", vin);
+  return selectedCar;
+};
+
+const create = async (car) => {
+  // DO YOUR MAGIC
+  let id = await db("cars").insert(car);
+  let newCar = await getById(id);
+  return newCar;
 };
 
 module.exports = {
   getAll,
   getById,
   create,
+  getByVin,
 };

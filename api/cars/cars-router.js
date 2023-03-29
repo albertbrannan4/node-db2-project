@@ -1,7 +1,12 @@
 // DO YOUR MAGIC
 const router = require("express").Router();
-const { getAll, getById } = require("./cars-model");
-const { checkCarId } = require("./cars-middleware");
+const { getAll, getById, create } = require("./cars-model");
+const {
+  checkCarId,
+  checkVinNumberUnique,
+  checkVinNumberValid,
+  checkCarPayload,
+} = require("./cars-middleware");
 
 router.get("/", async (req, res) => {
   let allCars = await getAll();
@@ -17,9 +22,20 @@ router.get("/:id", checkCarId, async (req, res, next) => {
   }
 });
 
-router.post("/", async (req, res, next) => {
-  res.json("this works");
-});
+router.post(
+  "/",
+  checkVinNumberUnique,
+  checkVinNumberValid,
+  checkCarPayload,
+  async (req, res, next) => {
+    try {
+      let created = await create(req.body);
+      res.status(201).json(created);
+    } catch (err) {
+      next(err);
+    }
+  }
+);
 
 router.use((err, req, res, next) => {
   res.status(err.status || 500).json({ message: err.message });
